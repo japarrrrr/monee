@@ -1,3 +1,128 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    /* Neo-Brutalism Cards (Solid borders, zero gradients, hard shadows) */
+    .neo-card {
+        background-color: #FFFFFF;
+        border: 2px solid #171717;
+        box-shadow: 4px 4px 0px 0px #171717;
+        border-radius: 14px;
+    }
+
+    .neo-card-sm {
+        background-color: #FFFFFF;
+        border: 2px solid #171717;
+        box-shadow: 3px 3px 0px 0px #171717;
+        border-radius: 10px;
+    }
+
+    .neo-card-lg {
+        background-color: #FFFFFF;
+        border: 2.5px solid #171717;
+        box-shadow: 6px 6px 0px 0px #171717;
+        border-radius: 18px;
+    }
+
+    .neo-card-yellow {
+        background-color: #FACC15;
+        border: 2px solid #171717;
+        box-shadow: 4px 4px 0px 0px #171717;
+        border-radius: 14px;
+        color: #171717;
+    }
+
+    .neo-card-purple {
+        background-color: #A78BFA;
+        border: 2px solid #171717;
+        box-shadow: 4px 4px 0px 0px #171717;
+        border-radius: 14px;
+        color: #171717;
+    }
+
+    /* Neo-Brutalism Buttons (Bold, hard shadow, tactile click effect) */
+    .neo-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        border: 2px solid #171717;
+        box-shadow: 3px 3px 0px 0px #171717;
+        border-radius: 12px;
+        transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+    }
+
+    .neo-btn:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 4px 4px 0px 0px #171717;
+    }
+
+    .neo-btn:active {
+        transform: translate(2px, 2px);
+        box-shadow: 1px 1px 0px 0px #171717;
+    }
+
+    .neo-btn-primary {
+        background-color: #2563EB;
+        color: #FFFFFF;
+    }
+    .neo-btn-primary:hover {
+        background-color: #1D4ED8;
+    }
+
+    .neo-btn-yellow {
+        background-color: #FACC15;
+        color: #171717;
+    }
+    .neo-btn-yellow:hover {
+        background-color: #EAB308;
+    }
+
+    .neo-btn-white {
+        background-color: #FFFFFF;
+        color: #171717;
+    }
+    .neo-btn-white:hover {
+        background-color: #F5F5F0;
+    }
+
+    .neo-btn-danger {
+        background-color: #EF4444;
+        color: #FFFFFF;
+    }
+    .neo-btn-danger:hover {
+        background-color: #DC2626;
+    }
+
+    /* Neo-Brutalism Form Inputs */
+    .neo-input {
+        width: 100%;
+        background-color: #FFFFFF;
+        border: 2px solid #171717;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+        color: #171717;
+        outline: none;
+        transition: box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    .neo-input:focus {
+        box-shadow: 3px 3px 0px 0px #171717;
+        border-color: #171717;
+    }
+
+    /* Neo-Brutalism Badges */
+    .neo-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.625rem;
+        font-size: 0.75rem;
+        font-weight: 800;
+        border: 2px solid #171717;
+        border-radius: 8px;
+        box-shadow: 2px 2px 0px 0px #171717;
+    }
+}

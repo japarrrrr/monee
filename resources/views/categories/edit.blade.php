@@ -1,147 +1,127 @@
-
 <x-app-layout>
-    <div class="min-h-screen bg-slate-50">
-        <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-[#F5F5F0] py-6 sm:py-8">
+        <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 space-y-6">
 
-            {{-- HEADER --}}
-            <div class="mb-8">
+            {{-- BACK + HEADER --}}
+            <div>
                 <a href="{{ route('categories.index') }}"
-                   class="mb-4 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-blue-600">
+                   class="mb-3 inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#525252] hover:text-[#171717]">
                     <i data-lucide="arrow-left" class="h-4 w-4"></i>
                     Kembali ke Kategori
                 </a>
-
-                <h1 class="text-3xl font-extrabold tracking-tight text-slate-800">
-                    Edit Kategori
-                </h1>
-                <p class="mt-2 text-sm text-slate-500">
-                    Perbarui informasi kategori keuangan Anda.
-                </p>
+                <h1 class="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl">Edit Kategori</h1>
+                <p class="mt-1 text-sm font-bold text-[#525252]">Perbarui detail pos kategori <strong>{{ $category->name }}</strong>.</p>
             </div>
 
-            {{-- FORM --}}
-            <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8">
-                <form method="POST" action="{{ route('categories.update', $category->id) }}">
+            <div class="neo-card p-6 sm:p-8 bg-white">
+                <form method="POST" action="{{ route('categories.update', $category->id) }}" class="space-y-6">
                     @csrf
                     @method('PUT')
 
-                    {{-- NAMA --}}
-                    <div class="mb-6">
-                        <label for="name" class="mb-2 block text-sm font-semibold text-slate-700">
-                            Nama Kategori
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value="{{ old('name', $category->name) }}"
-                            required
-                            maxlength="100"
-                            class="w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500"
-                        >
-                        @error('name')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                    {{-- Nama --}}
+                    <div>
+                        <label for="name" class="mb-2 block text-xs font-black uppercase tracking-wider text-[#171717]">Nama Kategori</label>
+                        <input type="text"
+                               id="name"
+                               name="name"
+                               value="{{ old('name', $category->name) }}"
+                               placeholder="Contoh: Gaji, Makanan, Belanja, Hiburan"
+                               required
+                               maxlength="100"
+                               class="neo-input">
+                        @error('name')<p class="mt-1.5 text-xs font-bold text-[#EF4444]">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- JENIS --}}
-                    <div class="mb-6">
-                        <label for="type" class="mb-2 block text-sm font-semibold text-slate-700">
-                            Jenis Kategori
-                        </label>
-                        <select
-                            id="type"
-                            name="type"
-                            required
-                            class="w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500"
-                        >
-                            <option value="income" {{ old('type', $category->type) === 'income' ? 'selected' : '' }}>
-                                Pemasukan
-                            </option>
-                            <option value="expense" {{ old('type', $category->type) === 'expense' ? 'selected' : '' }}>
-                                Pengeluaran
-                            </option>
+                    {{-- Jenis Kategori --}}
+                    <div>
+                        <label class="mb-2.5 block text-xs font-black uppercase tracking-wider text-[#171717]">Jenis Kategori</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="type" value="income" class="peer sr-only"
+                                       {{ old('type', $category->type) === 'income' ? 'checked' : '' }}>
+                                <div class="flex items-center gap-3 rounded-xl border-2 border-[#171717] bg-white p-3.5 transition
+                                            peer-checked:bg-[#16A34A] peer-checked:text-white peer-checked:shadow-[3px_3px_0px_#171717] hover:bg-[#F5F5F0]">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-[#171717] bg-white text-[#171717]">
+                                        <i data-lucide="trending-up" class="h-5 w-5 stroke-[2.5] text-[#16A34A]"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-black">Pemasukan</p>
+                                        <p class="text-[10px] font-bold opacity-80">Uang masuk</p>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <label class="cursor-pointer">
+                                <input type="radio" name="type" value="expense" class="peer sr-only"
+                                       {{ old('type', $category->type) === 'expense' ? 'checked' : '' }}>
+                                <div class="flex items-center gap-3 rounded-xl border-2 border-[#171717] bg-white p-3.5 transition
+                                            peer-checked:bg-[#EF4444] peer-checked:text-white peer-checked:shadow-[3px_3px_0px_#171717] hover:bg-[#F5F5F0]">
+                                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-2 border-[#171717] bg-white text-[#171717]">
+                                        <i data-lucide="trending-down" class="h-5 w-5 stroke-[2.5] text-[#EF4444]"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-black">Pengeluaran</p>
+                                        <p class="text-[10px] font-bold opacity-80">Uang keluar</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        @error('type')<p class="mt-1.5 text-xs font-bold text-[#EF4444]">{{ $message }}</p>@enderror
+                    </div>
+
+                    {{-- Ikon --}}
+                    <div>
+                        <label for="icon" class="mb-2 block text-xs font-black uppercase tracking-wider text-[#171717]">Pilih Ikon</label>
+                        <select id="icon" name="icon" class="neo-input font-bold">
+                            <option value="tag"            {{ old('icon', $category->icon) === 'tag'            ? 'selected' : '' }}>🏷️ Tag (Default)</option>
+                            <option value="wallet"         {{ old('icon', $category->icon) === 'wallet'         ? 'selected' : '' }}>👛 Dompet</option>
+                            <option value="banknote"       {{ old('icon', $category->icon) === 'banknote'       ? 'selected' : '' }}>💵 Uang Tunai</option>
+                            <option value="shopping-cart"  {{ old('icon', $category->icon) === 'shopping-cart'  ? 'selected' : '' }}>🛒 Belanja</option>
+                            <option value="utensils"       {{ old('icon', $category->icon) === 'utensils'       ? 'selected' : '' }}>🍴 Makanan & Minuman</option>
+                            <option value="car"            {{ old('icon', $category->icon) === 'car'            ? 'selected' : '' }}>🚗 Transportasi</option>
+                            <option value="house"          {{ old('icon', $category->icon) === 'house'          ? 'selected' : '' }}>🏠 Kebutuhan Rumah</option>
+                            <option value="heart-pulse"    {{ old('icon', $category->icon) === 'heart-pulse'    ? 'selected' : '' }}>❤️ Kesehatan</option>
+                            <option value="graduation-cap" {{ old('icon', $category->icon) === 'graduation-cap' ? 'selected' : '' }}>🎓 Pendidikan</option>
+                            <option value="briefcase"      {{ old('icon', $category->icon) === 'briefcase'      ? 'selected' : '' }}>💼 Pekerjaan & Usaha</option>
                         </select>
-                        @error('type')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        @error('icon')<p class="mt-1.5 text-xs font-bold text-[#EF4444]">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- IKON --}}
-                    <div class="mb-6">
-                        <label for="icon" class="mb-2 block text-sm font-semibold text-slate-700">
-                            Ikon
-                        </label>
-                        <select
-                            id="icon"
-                            name="icon"
-                            class="w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500"
-                        >
-                            @foreach ([
-                                'tag' => 'Tag',
-                                'wallet' => 'Dompet',
-                                'banknote' => 'Uang',
-                                'shopping-cart' => 'Belanja',
-                                'utensils' => 'Makanan',
-                                'car' => 'Transportasi',
-                                'house' => 'Rumah',
-                                'heart-pulse' => 'Kesehatan',
-                                'graduation-cap' => 'Pendidikan',
-                                'briefcase' => 'Pekerjaan',
-                            ] as $value => $label)
-                                <option value="{{ $value }}" {{ old('icon', $category->icon ?: 'tag') === $value ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('icon')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    {{-- WARNA --}}
-                    <div class="mb-8">
-                        <label for="color" class="mb-2 block text-sm font-semibold text-slate-700">
-                            Warna Kategori
-                        </label>
-                        <select
-                            id="color"
-                            name="color"
-                            class="w-full rounded-xl border-slate-200 px-4 py-3 text-sm focus:border-blue-500 focus:ring-blue-500"
-                        >
-                            @foreach ([
+                    {{-- Warna Solid --}}
+                    <div>
+                        <label class="mb-2.5 block text-xs font-black uppercase tracking-wider text-[#171717]">Pilihan Warna Solid</label>
+                        <div class="flex flex-wrap gap-3">
+                            @foreach([
                                 '#2563EB' => 'Biru',
                                 '#16A34A' => 'Hijau',
-                                '#DC2626' => 'Merah',
-                                '#9333EA' => 'Ungu',
+                                '#EF4444' => 'Merah',
+                                '#A78BFA' => 'Ungu',
+                                '#FACC15' => 'Kuning',
                                 '#EA580C' => 'Oranye',
-                                '#D97706' => 'Kuning',
                                 '#0891B2' => 'Toska',
-                                '#64748B' => 'Abu-abu',
-                            ] as $value => $label)
-                                <option value="{{ $value }}" {{ old('color', $category->color ?: '#2563EB') === $value ? 'selected' : '' }}>
-                                    {{ $label }}
-                                </option>
+                                '#171717' => 'Hitam',
+                            ] as $hex => $label)
+                                <label class="cursor-pointer" title="{{ $label }}">
+                                    <input type="radio" name="color" value="{{ $hex }}" class="peer sr-only"
+                                           {{ old('color', $category->color) === $hex ? 'checked' : '' }}>
+                                    <div class="h-9 w-9 rounded-xl border-2 border-[#171717] transition
+                                                peer-checked:scale-115 peer-checked:shadow-[3px_3px_0px_#171717] hover:scale-105"
+                                         style="background-color: {{ $hex }};"></div>
+                                </label>
                             @endforeach
-                        </select>
-                        @error('color')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        </div>
+                        @error('color')<p class="mt-1.5 text-xs font-bold text-[#EF4444]">{{ $message }}</p>@enderror
                     </div>
 
-                    {{-- BUTTON --}}
-                    <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    {{-- Buttons --}}
+                    <div class="flex flex-col-reverse gap-3 border-t-2 border-[#171717]/10 pt-5 sm:flex-row sm:justify-end">
                         <a href="{{ route('categories.index') }}"
-                           class="rounded-xl border border-slate-200 px-5 py-3 text-center text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+                           class="neo-btn neo-btn-white px-6 py-2.5 text-xs">
                             Batal
                         </a>
-
-                        <button
-                            type="submit"
-                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-                        >
-                            <i data-lucide="save" class="h-4 w-4"></i>
-                            Simpan Perubahan
+                        <button type="submit"
+                                class="neo-btn neo-btn-primary px-6 py-2.5 text-xs">
+                            Perbarui Kategori
                         </button>
                     </div>
                 </form>

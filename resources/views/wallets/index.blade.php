@@ -1,150 +1,159 @@
 <x-app-layout>
-    <div class="min-h-screen bg-slate-50">
-        <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        @if (session('success'))
-        <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-700">
-            <i data-lucide="check-circle" class="h-5 w-5 shrink-0"></i>
-            {{ session('success') }}
-        </div>
-        @endif
+    <div class="min-h-screen bg-[#F5F5F0] py-6 sm:py-8">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+
             {{-- HEADER --}}
-            <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p class="mb-2 text-sm font-semibold text-blue-600">KEUANGAN SAYA</p>
-                    <h1 class="text-3xl font-extrabold tracking-tight text-slate-800">
-                        Dompet
+                    <div class="inline-flex items-center gap-1.5 rounded-lg bg-[#FACC15] border-2 border-[#171717] px-2.5 py-1 shadow-[2px_2px_0px_#171717] mb-2 text-xs font-black text-[#171717] uppercase tracking-wider">
+                        <i data-lucide="wallet" class="h-3.5 w-3.5"></i>
+                        Manajemen Finansial
+                    </div>
+                    <h1 class="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl lg:text-4xl">
+                        Dompet Keuangan
                     </h1>
-                    <p class="mt-2 text-sm text-slate-500">
-                        Kelola saldo dan pantau seluruh sumber keuangan Anda.
+                    <p class="mt-1 text-sm font-bold text-[#525252]">
+                        Kelola seluruh kantong kas, rekening bank, dan saldo dompet digital Anda.
                     </p>
                 </div>
-
                 <a href="{{ route('wallets.create') }}"
-                   class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700">
-                    <i data-lucide="plus" class="h-5 w-5"></i>
+                   class="neo-btn neo-btn-primary px-5 py-3 text-sm flex items-center gap-2">
+                    <i data-lucide="plus" class="h-5 w-5 stroke-[2.5]"></i>
                     Tambah Dompet
                 </a>
             </div>
 
-            {{-- SUMMARY --}}
-            <div class="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+            {{-- SUMMARY STATS --}}
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+                {{-- Total Dompet --}}
+                <div class="neo-card p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-slate-500">Total Dompet</p>
-                            <h2 class="mt-2 text-3xl font-extrabold text-slate-800">
-                                {{ $wallets->count() }}
+                            <span class="text-xs font-black uppercase tracking-wider text-[#525252]">Total Dompet Terdaftar</span>
+                            <h2 class="mt-1.5 text-3xl font-black text-[#171717] sm:text-4xl">
+                                {{ $wallets->count() }} <span class="text-sm font-bold text-[#525252]">Dompet</span>
                             </h2>
+                            <p class="mt-1 text-xs font-bold text-[#525252]">Status aktif digunakan</p>
                         </div>
-                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                            <i data-lucide="wallet" class="h-6 w-6"></i>
+                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#FACC15] border-2 border-[#171717] shadow-[3px_3px_0px_#171717] text-[#171717]">
+                            <i data-lucide="wallet" class="h-7 w-7 stroke-[2.5]"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-                    <div class="flex items-center justify-between">
+                {{-- Total Saldo --}}
+                <div class="neo-card p-6">
+                    <div class="flex items-center justify-between gap-4">
                         <div>
-                            <p class="text-sm font-medium text-slate-500">Total Saldo Awal</p>
-                            <h2 class="mt-2 text-2xl font-extrabold text-slate-800">
-                                Rp {{ number_format($wallets->sum('opening_balance'), 0, ',', '.') }}
+                            <span class="text-xs font-black uppercase tracking-wider text-[#525252]">Total Saldo Gabungan</span>
+                            <h2 class="mt-1.5 text-3xl font-black text-[#2563EB] sm:text-4xl">
+                                Rp {{ number_format($wallets->sum('current_balance'), 0, ',', '.') }}
                             </h2>
+                            <p class="mt-1 text-xs font-bold text-[#525252]">Akumulasi seluruh sumber dana</p>
                         </div>
-                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                            <i data-lucide="wallet-cards" class="h-6 w-6"></i>
+                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] border-2 border-[#171717] shadow-[3px_3px_0px_#171717] text-white">
+                            <i data-lucide="wallet-cards" class="h-7 w-7 stroke-[2.5]"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- WALLET LIST --}}
-            <div class="mb-5 flex items-center justify-between">
+            {{-- SECTION HEADER --}}
+            <div class="flex items-center justify-between border-b-2 border-[#171717]/10 pb-3">
                 <div>
-                    <h2 class="text-lg font-bold text-slate-800">Daftar Dompet</h2>
-                    <p class="mt-1 text-sm text-slate-500">Semua dompet yang Anda miliki.</p>
+                    <h2 class="text-xl font-black text-[#171717]">Daftar Dompet</h2>
+                    <p class="text-xs font-bold text-[#525252]">Daftar akun keuangan Anda saat ini.</p>
                 </div>
+                <span class="neo-badge bg-white text-[#171717] text-xs">
+                    {{ $wallets->count() }} Akun
+                </span>
             </div>
 
-            @if($wallets->isEmpty())
-                <div class="rounded-2xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
-                    <div class="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-blue-50 text-blue-600">
-                        <i data-lucide="wallet" class="h-10 w-10"></i>
+            @if ($wallets->isEmpty())
+                {{-- EMPTY STATE --}}
+                <div class="neo-card p-12 text-center bg-white">
+                    <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-[#FACC15] border-2 border-[#171717] shadow-[3px_3px_0px_#171717] text-[#171717]">
+                        <i data-lucide="wallet" class="h-8 w-8 stroke-[2.5]"></i>
                     </div>
-
-                    <h3 class="text-xl font-bold text-slate-800">
-                        Belum Ada Dompet
-                    </h3>
-
-                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-                        Anda belum memiliki dompet. Tambahkan dompet pertama untuk mulai mengelola uang tunai, rekening bank, dan e-wallet.
+                    <h3 class="text-lg font-black text-[#171717]">Belum Ada Dompet</h3>
+                    <p class="mx-auto mt-1 max-w-sm text-xs font-bold text-[#525252]">
+                        Tambahkan dompet pertama Anda untuk mulai mencatat dan mengelola keuangan pribadi.
                     </p>
-
                     <a href="{{ route('wallets.create') }}"
-                       class="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-blue-700">
+                       class="neo-btn neo-btn-primary mt-5 px-5 py-2.5 text-xs inline-flex items-center gap-1.5">
                         <i data-lucide="plus" class="h-4 w-4"></i>
                         Buat Dompet Pertama
                     </a>
                 </div>
             @else
                 <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                    @foreach($wallets as $wallet)
-                        <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                            <div class="flex items-start justify-between">
-                                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                                    @if($wallet->type === 'cash')
-                                        <i data-lucide="banknote" class="h-6 w-6"></i>
-                                    @elseif($wallet->type === 'bank')
-                                        <i data-lucide="building-2" class="h-6 w-6"></i>
-                                    @else
-                                        <i data-lucide="smartphone" class="h-6 w-6"></i>
-                                    @endif
+                    @foreach ($wallets as $wallet)
+                        @php
+                            $wConfig = match($wallet->type) {
+                                'cash'    => ['icon' => 'banknote',   'bg' => 'bg-[#FACC15]', 'text' => 'text-[#171717]', 'label' => 'Tunai'],
+                                'bank'    => ['icon' => 'building-2', 'bg' => 'bg-[#A78BFA]', 'text' => 'text-[#171717]', 'label' => 'Bank'],
+                                default   => ['icon' => 'smartphone', 'bg' => 'bg-[#2563EB]', 'text' => 'text-white',     'label' => 'E-Wallet'],
+                            };
+                        @endphp
+
+                        <div class="neo-card p-6 flex flex-col justify-between transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_#171717]">
+
+                            <div>
+                                {{-- Card Header --}}
+                                <div class="flex items-start justify-between">
+                                    <div class="flex h-12 w-12 items-center justify-center rounded-xl border-2 border-[#171717] {{ $wConfig['bg'] }} {{ $wConfig['text'] }} shadow-[2px_2px_0px_#171717]">
+                                        <i data-lucide="{{ $wConfig['icon'] }}" class="h-6 w-6 stroke-[2.5]"></i>
+                                    </div>
+                                    <span class="neo-badge {{ $wConfig['bg'] }} {{ $wConfig['text'] }}">
+                                        {{ $wConfig['label'] }}
+                                    </span>
                                 </div>
 
-                                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                                    {{ ['cash' => 'Tunai', 'bank' => 'Bank', 'ewallet' => 'E-Wallet'][$wallet->type] ?? 'Lainnya' }}
-                                </span>
+                                {{-- Name & Description --}}
+                                <h3 class="mt-4 text-xl font-black text-[#171717] tracking-tight">{{ $wallet->name }}</h3>
+                                @if ($wallet->description)
+                                    <p class="mt-1 text-xs font-bold text-[#525252] line-clamp-2">
+                                        {{ $wallet->description }}
+                                    </p>
+                                @endif
+
+                                {{-- Saldo Saat Ini --}}
+                                <div class="mt-5 p-3.5 rounded-xl border-2 border-[#171717] bg-[#F5F5F0] shadow-[2px_2px_0px_#171717]">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-[#525252]">Saldo Saat Ini</span>
+                                    <p class="text-2xl font-black tracking-tight {{ $wallet->current_balance < 0 ? 'text-[#EF4444]' : 'text-[#171717]' }} mt-0.5">
+                                        Rp {{ number_format($wallet->current_balance, 0, ',', '.') }}
+                                    </p>
+                                    <div class="mt-1 pt-1.5 border-t border-[#171717]/10 flex items-center justify-between text-[11px] font-bold text-[#525252]">
+                                        <span>Saldo Awal:</span>
+                                        <span>Rp {{ number_format($wallet->opening_balance, 0, ',', '.') }}</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <h3 class="mt-5 text-lg font-bold text-slate-800">
-                                {{ $wallet->name }}
-                            </h3>
-
-                            <p class="mt-2 text-xs text-slate-400">Saldo awal</p>
-
-                            <p class="mt-1 text-2xl font-extrabold text-slate-800">
-                                Rp {{ number_format((float) $wallet->opening_balance, 0, ',', '.') }}
-                            </p>
-
-                            @if($wallet->description)
-                                <p class="mt-3 border-t border-slate-100 pt-3 text-sm text-slate-500">
-                                    {{ $wallet->description }}
-                                </p>
-                            @endif
-
-                            <div class="mt-5 flex flex-wrap justify-between gap-3 border-t border-slate-100 pt-4">
-                                <a
-                                    href="{{ route('wallets.edit', $wallet->id) }}"
-                                    class="inline-flex items-center justify-center rounded-lg bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
-                                >
-                                    Edit Dompet
+                            {{-- Actions --}}
+                            <div class="mt-6 flex items-center gap-2 pt-4 border-t-2 border-[#171717]/10">
+                                <a href="{{ route('wallets.edit', $wallet->id) }}"
+                                   class="neo-btn neo-btn-white flex-1 py-2 text-xs flex items-center justify-center gap-1.5">
+                                    <i data-lucide="pencil" class="h-3.5 w-3.5"></i>
+                                    Edit
                                 </a>
 
-                                <form
-                                    method="POST"
-                                    action="{{ route('wallets.destroy', $wallet->id) }}"
-                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus dompet ini?')"
-                                >
+                                <button type="button"
+                                        onclick="confirmDelete('delete-wallet-{{ $wallet->id }}', 'Apakah Anda yakin ingin menghapus dompet {{ $wallet->name }}?')"
+                                        class="neo-btn neo-btn-danger py-2 px-3 text-xs flex items-center justify-center gap-1.5">
+                                    <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+                                    Hapus
+                                </button>
+
+                                <form id="delete-wallet-{{ $wallet->id }}"
+                                      action="{{ route('wallets.destroy', $wallet->id) }}"
+                                      method="POST"
+                                      class="hidden">
                                     @csrf
                                     @method('DELETE')
-
-                                    <button
-                                        type="submit"
-                                        class="inline-flex items-center justify-center rounded-lg bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-100"
-                                    >
-                                        Hapus Dompet
-                                    </button>
                                 </form>
                             </div>
+
                         </div>
                     @endforeach
                 </div>

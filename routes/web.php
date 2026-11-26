@@ -1,17 +1,20 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ReportController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -53,6 +56,12 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])
     ->name('categories.destroy');
+
+    Route::resource('transactions', TransactionController::class)
+    ->except(['show']);
+
+    Route::get('/reports', [ReportController::class, 'index'])
+    ->name('reports.index');
 });
 
 require __DIR__.'/auth.php';

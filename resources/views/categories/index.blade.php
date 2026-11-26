@@ -1,149 +1,157 @@
-
 <x-app-layout>
-    <div class="min-h-screen bg-slate-50">
-        <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-[#F5F5F0] py-6 sm:py-8">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
 
             {{-- HEADER --}}
-            <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p class="mb-2 text-sm font-semibold text-blue-600">
-                        PENGELOLAAN KEUANGAN
-                    </p>
-                    <h1 class="text-3xl font-extrabold tracking-tight text-slate-800">
-                        Kategori
+                    <div class="inline-flex items-center gap-1.5 rounded-lg bg-[#FACC15] border-2 border-[#171717] px-2.5 py-1 shadow-[2px_2px_0px_#171717] mb-2 text-xs font-black text-[#171717] uppercase tracking-wider">
+                        <i data-lucide="tags" class="h-3.5 w-3.5"></i>
+                        Klasifikasi Anggaran
+                    </div>
+                    <h1 class="text-2xl font-black tracking-tight text-[#171717] sm:text-3xl lg:text-4xl">
+                        Kategori Transaksi
                     </h1>
-                    <p class="mt-2 text-sm text-slate-500">
-                        Kelompokkan pemasukan dan pengeluaran agar pencatatan lebih teratur.
+                    <p class="mt-1 text-sm font-bold text-[#525252]">
+                        Kelompokkan pos pemasukan dan pos pengeluaran Anda dengan rapi.
                     </p>
                 </div>
-
                 <a href="{{ route('categories.create') }}"
-                   class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
-                    <i data-lucide="plus" class="h-5 w-5"></i>
+                   class="neo-btn neo-btn-primary px-5 py-3 text-sm flex items-center gap-2">
+                    <i data-lucide="plus" class="h-5 w-5 stroke-[2.5]"></i>
                     Tambah Kategori
                 </a>
             </div>
 
             {{-- SUMMARY --}}
-            <div class="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+                <div class="neo-card p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-slate-500">Kategori Pemasukan</p>
-                            <h2 class="mt-2 text-3xl font-extrabold text-emerald-600">
-                                {{ $categories->where('type', 'income')->count() }}
+                            <span class="text-xs font-black uppercase tracking-wider text-[#525252]">Kategori Pemasukan</span>
+                            <h2 class="mt-1.5 text-3xl font-black text-[#16A34A] sm:text-4xl">
+                                {{ $categories->where('type', 'income')->count() }} <span class="text-sm font-bold text-[#525252]">Pos</span>
                             </h2>
+                            <p class="mt-1 text-xs font-bold text-[#525252]">Pos penerimaan dana</p>
                         </div>
-                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                            <i data-lucide="trending-up" class="h-6 w-6"></i>
+                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#16A34A] border-2 border-[#171717] shadow-[3px_3px_0px_#171717] text-white">
+                            <i data-lucide="trending-up" class="h-7 w-7 stroke-[2.5]"></i>
                         </div>
                     </div>
                 </div>
 
-                <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+                <div class="neo-card p-6">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-slate-500">Kategori Pengeluaran</p>
-                            <h2 class="mt-2 text-3xl font-extrabold text-red-600">
-                                {{ $categories->where('type', 'expense')->count() }}
+                            <span class="text-xs font-black uppercase tracking-wider text-[#525252]">Kategori Pengeluaran</span>
+                            <h2 class="mt-1.5 text-3xl font-black text-[#EF4444] sm:text-4xl">
+                                {{ $categories->where('type', 'expense')->count() }} <span class="text-sm font-bold text-[#525252]">Pos</span>
                             </h2>
+                            <p class="mt-1 text-xs font-bold text-[#525252]">Pos alokasi belanja & biaya</p>
                         </div>
-                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 text-red-600">
-                            <i data-lucide="trending-down" class="h-6 w-6"></i>
+                        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-[#EF4444] border-2 border-[#171717] shadow-[3px_3px_0px_#171717] text-white">
+                            <i data-lucide="trending-down" class="h-7 w-7 stroke-[2.5]"></i>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {{-- NOTIFICATION --}}
-            @if (session('success'))
-                <div class="mb-6 flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-700">
-                    <i data-lucide="check-circle" class="h-5 w-5 shrink-0"></i>
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700">
-                    {{ session('error') }}
-                </div>
-            @endif
-
-            {{-- CATEGORY LIST HEADER --}}
-            <div class="mb-5">
-                <h2 class="text-lg font-bold text-slate-800">Daftar Kategori</h2>
-                <p class="mt-1 text-sm text-slate-500">
-                    Seluruh kategori yang Anda miliki.
-                </p>
-            </div>
-
-            {{-- EMPTY STATE --}}
             @if ($categories->isEmpty())
-                <div class="rounded-2xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
-                    <div class="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-blue-50 text-blue-600">
-                        <i data-lucide="tags" class="h-10 w-10"></i>
+                {{-- EMPTY STATE --}}
+                <div class="neo-card p-12 text-center bg-white">
+                    <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-[#FACC15] border-2 border-[#171717] shadow-[3px_3px_0px_#171717] text-[#171717]">
+                        <i data-lucide="tags" class="h-8 w-8 stroke-[2.5]"></i>
                     </div>
-
-                    <h3 class="text-xl font-bold text-slate-800">Belum Ada Kategori</h3>
-                    <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-                        Anda belum memiliki kategori transaksi. Buat kategori pemasukan dan pengeluaran agar pencatatan keuangan lebih mudah.
+                    <h3 class="text-lg font-black text-[#171717]">Belum Ada Kategori</h3>
+                    <p class="mx-auto mt-1 max-w-sm text-xs font-bold text-[#525252]">
+                        Buat kategori pertama Anda untuk memudahkan pelacakan pos keuangan.
                     </p>
-
                     <a href="{{ route('categories.create') }}"
-                       class="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
-                        <i data-lucide="plus" class="h-5 w-5"></i>
+                       class="neo-btn neo-btn-primary mt-5 px-5 py-2.5 text-xs inline-flex items-center gap-1.5">
+                        <i data-lucide="plus" class="h-4 w-4"></i>
                         Buat Kategori Pertama
                     </a>
                 </div>
-
-            {{-- CATEGORY CARDS --}}
             @else
-                <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                    @foreach ($categories as $category)
-                        <div class="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:shadow-md">
-                            <div class="flex flex-col gap-5">
+                {{-- TABS & LIST --}}
+                <div x-data="{ tab: 'all' }" class="space-y-6">
 
-                                {{-- CATEGORY INFORMATION --}}
-                                <div class="flex min-w-0 items-center gap-4">
-                                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                                        <i data-lucide="{{ $category->icon ?: 'tag' }}" class="h-6 w-6"></i>
-                                    </div>
+                    {{-- TABS CONTROL (NEO-BRUTALISM) --}}
+                    <div class="flex gap-2.5 overflow-x-auto pb-1">
+                        <button @click="tab = 'all'"
+                                :class="tab === 'all'
+                                    ? 'bg-[#2563EB] text-white border-2 border-[#171717] shadow-[3px_3px_0px_#171717]'
+                                    : 'bg-white text-[#171717] border-2 border-[#171717] hover:bg-[#F5F5F0] shadow-[2px_2px_0px_#171717]'"
+                                class="neo-btn px-4 py-2 text-xs font-black rounded-xl">
+                            Semua Pos ({{ $categories->count() }})
+                        </button>
+                        <button @click="tab = 'income'"
+                                :class="tab === 'income'
+                                    ? 'bg-[#16A34A] text-white border-2 border-[#171717] shadow-[3px_3px_0px_#171717]'
+                                    : 'bg-white text-[#171717] border-2 border-[#171717] hover:bg-[#F5F5F0] shadow-[2px_2px_0px_#171717]'"
+                                class="neo-btn px-4 py-2 text-xs font-black rounded-xl">
+                            Pemasukan ({{ $categories->where('type', 'income')->count() }})
+                        </button>
+                        <button @click="tab = 'expense'"
+                                :class="tab === 'expense'
+                                    ? 'bg-[#EF4444] text-white border-2 border-[#171717] shadow-[3px_3px_0px_#171717]'
+                                    : 'bg-white text-[#171717] border-2 border-[#171717] hover:bg-[#F5F5F0] shadow-[2px_2px_0px_#171717]'"
+                                class="neo-btn px-4 py-2 text-xs font-black rounded-xl">
+                            Pengeluaran ({{ $categories->where('type', 'expense')->count() }})
+                        </button>
+                    </div>
 
-                                    <div class="min-w-0">
-                                        <h3 class="truncate font-bold text-slate-800">
-                                            {{ $category->name }}
-                                        </h3>
-                                        <span class="text-xs font-semibold {{ $category->type === 'income' ? 'text-emerald-600' : 'text-red-600' }}">
-                                            {{ $category->type === 'income' ? 'Pemasukan' : 'Pengeluaran' }}
+                    {{-- CATEGORY GRID --}}
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        @foreach ($categories as $category)
+                            <div x-show="tab === 'all' || tab === '{{ $category->type }}'"
+                                 class="neo-card p-4 flex flex-col justify-between transition hover:-translate-y-1 hover:shadow-[5px_5px_0px_#171717]">
+
+                                <div>
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-[#171717] shadow-[2px_2px_0px_#171717]"
+                                             style="background-color: {{ $category->color ?? '#2563EB' }}; color: #FFFFFF;">
+                                            <i data-lucide="{{ $category->icon ?? 'tag' }}" class="h-5 w-5 stroke-[2.5]"></i>
+                                        </div>
+                                        <span class="neo-badge {{ $category->type === 'income' ? 'bg-[#16A34A] text-white' : 'bg-[#EF4444] text-white' }}">
+                                            {{ $category->type === 'income' ? 'Masuk' : 'Keluar' }}
                                         </span>
                                     </div>
+
+                                    <h3 class="mt-3.5 text-base font-black text-[#171717] truncate">
+                                        {{ $category->name }}
+                                    </h3>
+                                    <p class="text-[11px] font-bold text-[#525252] mt-0.5">
+                                        {{ $category->type === 'income' ? 'Pos Pemasukan' : 'Pos Pengeluaran' }}
+                                    </p>
                                 </div>
 
-                                {{-- ACTION BUTTONS --}}
-                                <div class="flex items-center gap-2 border-t border-slate-100 pt-4">
+                                <div class="mt-4 flex items-center gap-2 pt-3 border-t-2 border-[#171717]/10">
                                     <a href="{{ route('categories.edit', $category->id) }}"
-                                       class="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-blue-200 px-3 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-50">
-                                        <i data-lucide="pencil" class="h-4 w-4"></i>
+                                       class="neo-btn neo-btn-white flex-1 py-1.5 text-xs flex items-center justify-center gap-1">
+                                        <i data-lucide="pencil" class="h-3 w-3"></i>
                                         Edit
                                     </a>
 
-                                    <form action="{{ route('categories.destroy', $category->id) }}"
+                                    <button type="button"
+                                            onclick="confirmDelete('delete-category-{{ $category->id }}', 'Apakah Anda yakin ingin menghapus kategori {{ $category->name }}?')"
+                                            class="neo-btn neo-btn-danger py-1.5 px-2.5 text-xs flex items-center justify-center">
+                                        <i data-lucide="trash-2" class="h-3 w-3"></i>
+                                    </button>
+
+                                    <form id="delete-category-{{ $category->id }}"
+                                          action="{{ route('categories.destroy', $category->id) }}"
                                           method="POST"
-                                          class="flex-1"
-                                          onsubmit="return confirm('Yakin ingin menghapus kategori {{ $category->name }}?')">
+                                          class="hidden">
                                         @csrf
                                         @method('DELETE')
-
-                                        <button type="submit"
-                                                class="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50">
-                                            <i data-lucide="trash-2" class="h-4 w-4"></i>
-                                            Hapus
-                                        </button>
                                     </form>
                                 </div>
+
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+
                 </div>
             @endif
 
