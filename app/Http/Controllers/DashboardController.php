@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class DashboardController extends Controller
 {
     public function index()
@@ -12,92 +10,74 @@ class DashboardController extends Controller
 
         // Saldo setiap dompet
         $wallets = $user->wallets()
-            ->withSum([
-                'transactions as total_income' => function ($query) {
-                    $query->where('type', 'income');
-                }
-            ], 'amount')
-            ->withSum([
-                'transactions as total_expense' => function ($query) {
-                    $query->where('type', 'expense');
-                }
-            ], 'amount')
+            ->withSum(['transactions as total_income' => fn ($q) => $q->where('type', 'income')], 'amount')
+            ->withSum(['transactions as total_expense' => fn ($q) => $q->where('type', 'expense')], 'amount')
             ->latest()
             ->get();
 
         foreach ($wallets as $wallet) {
-            $income = (float) ($wallet->total_income ?? 0);
-            $expense = (float) ($wallet->total_expense ?? 0);
-
-            $wallet->current_balance =
-                (float) $wallet->opening_balance + $income - $expense;
+            $wallet->current_balance = (float) $wallet->opening_balance
+                + (float) ($wallet->total_income ?? 0)
+                - (float) ($wallet->total_expense ?? 0);
         }
 
         $totalBalance = $wallets->sum('current_balance');
 
         // Ringkasan transaksi bulan ini
-        $startOfMonth = now()->startOfMonth()->toDateString();
-        $endOfMonth = now()->endOfMonth()->toDateString();
+        $monthlySummary = $user->transactions()
+            ->whereMonth('transaction_date', now()->month)
+            ->whereYear('transaction_date', now()->year)
+            ->selectRaw("
+                COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) AS monthly_income,
+                COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) AS monthly_expense,
+                COUNT(*) AS monthly_transaction_count
+            ")
+            ->first();
 
-        $monthlyTransactions = $user->transactions()
-            ->whereBetween('transaction_date', [
-                $startOfMonth,
-                $endOfMonth
-            ])
-            ->get();
-
-        $monthlyIncome = $monthlyTransactions
-            ->where('type', 'income')
-            ->sum('amount');
-
-        $monthlyExpense = $monthlyTransactions
-            ->where('type', 'expense')
-            ->sum('amount');
-
+        $monthlyIncome = (float) $monthlySummary->monthly_income;
+        $monthlyExpense = (float) $monthlySummary->monthly_expense;
+        $monthlyTransactionCount = (int) $monthlySummary->monthly_transaction_count;
         $netFlow = $monthlyIncome - $monthlyExpense;
 
         // Transaksi terbaru
         $recentTransactions = $user->transactions()
             ->with(['wallet', 'category'])
-            ->orderByDesc('transaction_date')
-            ->orderByDesc('id')
+            ->latest('transaction_date')
+            ->latest('id')
             ->limit(5)
             ->get();
 
-        // Data grafik 7 hari terakhir
-        $chartStart = now()->subDays(6)->startOfDay();
-
+        // Grafik 7 hari terakhir
         $chartTransactions = $user->transactions()
             ->whereBetween('transaction_date', [
-                $chartStart->toDateString(),
-                now()->toDateString()
+                now()->subDays(6)->toDateString(),
+                now()->toDateString(),
             ])
-            ->get();
+            ->selectRaw("
+                transaction_date,
+                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) AS income,
+                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS expense
+            ")
+            ->groupBy('transaction_date')
+            ->get()
+            ->keyBy('transaction_date');
 
-        $chartData = collect(range(6, 0))->reverse()->map(function ($day) use ($chartTransactions) {
+        $chartData = collect(range(6, 0))->map(function ($day) use ($chartTransactions) {
             $date = now()->subDays($day);
-
-            $dailyTransactions = $chartTransactions->filter(
-                fn ($transaction) =>
-                    $transaction->transaction_date->toDateString() === $date->toDateString()
-            );
 
             return [
                 'label' => $date->translatedFormat('D'),
-                'income' => (float) $dailyTransactions
-                    ->where('type', 'income')
-                    ->sum('amount'),
-                'expense' => (float) $dailyTransactions
-                    ->where('type', 'expense')
-                    ->sum('amount'),
+                'income' => (float) ($chartTransactions[$date->toDateString()]->income ?? 0),
+                'expense' => (float) ($chartTransactions[$date->toDateString()]->expense ?? 0),
             ];
-        })->values();
+        });
 
         return view('dashboard', compact(
             'wallets',
             'totalBalance',
             'monthlyIncome',
             'monthlyExpense',
+            'monthlyTransactionCount',
             'netFlow',
             'recentTransactions',
             'chartData'
